@@ -1,0 +1,17 @@
+tempo:
+  reportingEnabled: false
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi
+
+serviceMonitor:
+  enabled: true

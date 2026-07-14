@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-app
+  namespace: rag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rag-app
+  template:
+    metadata:
+      labels:
+        app: rag-app
+    spec:
+      containers:
+      - name: rag-app
+        image: rag-app:local
+        imagePullPolicy: IfNotPresent
+        
+        env:
+        - name: OTEL_SERVICE_NAME
+          value: rag-app
+
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://otel-collector-opentelemetry-collector.observability.svc.cluster.local:4318
+
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: http/protobuf
+
+
+        ports:
+        - containerPort: 8080
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: "1"
+            memory: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rag-app
+  namespace: rag
+spec:
+  selector:
+    app: rag-app
+  ports:
+  - port: 8080
+    targetPort: 8080

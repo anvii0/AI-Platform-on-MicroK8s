@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+qdrant-client
+sentence-transformers
+openai
+opentelemetry-distro
+opentelemetry-exporter-otlp
+opentelemetry-instrumentation-fastapi

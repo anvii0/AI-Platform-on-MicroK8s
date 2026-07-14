@@ -1,0 +1,33 @@
+ollama:
+  enabled: false
+
+pipelines:
+  enabled: false
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+service:
+  type: ClusterIP
+
+extraEnvVars:
+  - name: ENABLE_OPENAI_API
+    value: "true"
+
+  - name: OPENAI_API_BASE_URLS
+    value: "http://vllm.vllm.svc.cluster.local:8000/v1"
+
+  - name: OPENAI_API_KEYS
+    value: "dummy"
+
+  - name: DEFAULT_MODELS
+    value: "Qwen/Qwen2.5-1.5B-Instruct"
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: "2"
+    memory: 2Gi

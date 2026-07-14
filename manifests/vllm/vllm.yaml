@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm
+  namespace: vllm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vllm
+  template:
+    metadata:
+      labels:
+        app: vllm
+    spec:
+      runtimeClassName: nvidia
+
+      containers:
+      - name: vllm
+        image: vllm/vllm-openai:latest
+
+        args:
+        - --model
+        - Qwen/Qwen2.5-1.5B-Instruct
+        - --host
+        - 0.0.0.0
+        - --port
+        - "8000"
+        - --gpu-memory-utilization
+        - "0.85"
+        - --max-model-len
+        - "8192"
+        - --enable-auto-tool-choice
+        - --tool-call-parser
+        - hermes
+
+        env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-token
+              key: HF_TOKEN
+
+        ports:
+        - containerPort: 8000
+
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            memory: 12Gi
+          requests:
+            cpu: "2"
+            memory: 8Gi
+
+        volumeMounts:
+        - name: hf-cache
+          mountPath: /root/.cache/huggingface
+
+      volumes:
+      - name: hf-cache
+        persistentVolumeClaim:
+          claimName: hf-cache
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm
+  namespace: vllm
+spec:
+  selector:
+    app: vllm
+  ports:
+  - port: 8000
+    targetPort: 8000

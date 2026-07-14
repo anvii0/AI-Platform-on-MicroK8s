@@ -1,0 +1,56 @@
+grafana:
+  enabled: true
+  adminPassword: admin
+
+  service:
+    type: ClusterIP
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 768Mi
+
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki-gateway.observability.svc.cluster.local
+      isDefault: false
+
+    - name: Tempo
+      type: tempo
+      access: proxy
+      url: http://tempo.observability.svc.cluster.local:3100
+      isDefault: false
+
+prometheus:
+  prometheusSpec:
+    retention: 6h
+    scrapeInterval: 15s
+    evaluationInterval: 30s
+
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: "1"
+        memory: 2Gi
+
+alertmanager:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: true
+
+nodeExporter:
+  enabled: true
+
+defaultRules:
+  create: false

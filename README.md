@@ -1,6 +1,27 @@
-# GPU AI Platform on MicroK8s with vLLM, RAG and LGTM Observability
+# AI Platform on MicroK8s
 
-A complete self-hosted AI platform deployed on AWS EC2 using MicroK8s, NVIDIA GPU Operator, vLLM, Open WebUI, Qdrant, FastAPI-based RAG, and a full LGTM observability stack (Grafana, Prometheus, Loki, Tempo, OpenTelemetry).
+A self-hosted GPU AI platform for MicroK8s, combining vLLM, Open WebUI, Qdrant, a FastAPI-based RAG gateway, and LGTM observability (Grafana, Prometheus, Loki, Tempo, and OpenTelemetry).
+
+This repository is an adapted and documented implementation based on the upstream project by Deepak Deorari. The original MIT license and copyright notice are retained in [LICENSE](LICENSE). The deployment layout and application configuration have been adjusted for this repository, including environment-driven service endpoints and model settings.
+
+## Quick Start
+
+The supported deployment target is an Ubuntu 24.04 MicroK8s node with an NVIDIA GPU. Start with the [deployment runbook](runbooks/full-deployment-runbook.md), then use the [troubleshooting notes](docs/troubleshooting.md) while validating each service.
+
+Before deploying, update the Hugging Face token and confirm the model fits the available GPU memory. The manifests use a local image for the RAG gateway, so import that image into MicroK8s before applying `manifests/rag-app`.
+
+## Configuration
+
+The RAG gateway accepts these environment variables, making the application portable across namespaces or service implementations:
+
+| Variable | Default |
+| --- | --- |
+| `QDRANT_URL` | `http://qdrant.qdrant.svc.cluster.local:6333` |
+| `VLLM_BASE_URL` | `http://vllm.vllm.svc.cluster.local:8000/v1` |
+| `EMBEDDING_MODEL` | `sentence-transformers/all-MiniLM-L6-v2` |
+| `RAG_COLLECTION` | `docs` |
+| `RAG_BASE_MODEL` | `Qwen/Qwen2.5-1.5B-Instruct` |
+| `RAG_MODEL` | `rag-qwen` |
 
 ---
 

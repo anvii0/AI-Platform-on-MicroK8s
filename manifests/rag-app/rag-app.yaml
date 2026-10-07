@@ -28,6 +28,20 @@ spec:
         - name: OTEL_EXPORTER_OTLP_PROTOCOL
           value: http/protobuf
 
+        - name: QDRANT_URL
+          value: http://qdrant.qdrant.svc.cluster.local:6333
+
+        - name: VLLM_BASE_URL
+          value: http://vllm.vllm.svc.cluster.local:8000/v1
+
+        - name: RAG_COLLECTION
+          value: docs
+
+        - name: RAG_BASE_MODEL
+          value: Qwen/Qwen2.5-1.5B-Instruct
+
+        - name: RAG_MODEL
+          value: rag-qwen
 
         ports:
         - containerPort: 8080

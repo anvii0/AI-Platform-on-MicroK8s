@@ -1,4 +1,5 @@
 import json
+import os
 import time
 import uuid
 from typing import Any, Dict, List
@@ -14,22 +15,34 @@ from openai import OpenAI
 
 app = FastAPI(title="Custom RAG OpenAI-Compatible API")
 
+QDRANT_URL = os.getenv(
+    "QDRANT_URL",
+    "http://qdrant.qdrant.svc.cluster.local:6333",
+)
+VLLM_BASE_URL = os.getenv(
+    "VLLM_BASE_URL",
+    "http://vllm.vllm.svc.cluster.local:8000/v1",
+)
+EMBEDDING_MODEL = os.getenv(
+    "EMBEDDING_MODEL",
+    "sentence-transformers/all-MiniLM-L6-v2",
+)
+COLLECTION = os.getenv("RAG_COLLECTION", "docs")
+BASE_MODEL = os.getenv("RAG_BASE_MODEL", "Qwen/Qwen2.5-1.5B-Instruct")
+RAG_MODEL = os.getenv("RAG_MODEL", "rag-qwen")
+
 qdrant = QdrantClient(
-    url="http://qdrant.qdrant.svc.cluster.local:6333"
+    url=QDRANT_URL
 )
 
 embedder = SentenceTransformer(
-    "sentence-transformers/all-MiniLM-L6-v2"
+    EMBEDDING_MODEL
 )
 
 llm = OpenAI(
-    base_url="http://vllm.vllm.svc.cluster.local:8000/v1",
+    base_url=VLLM_BASE_URL,
     api_key="dummy"
 )
-
-COLLECTION = "docs"
-BASE_MODEL = "Qwen/Qwen2.5-1.5B-Instruct"
-RAG_MODEL = "rag-qwen"
 
 
 class IngestRequest(BaseModel):

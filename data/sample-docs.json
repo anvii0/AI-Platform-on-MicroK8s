@@ -1,0 +1,7 @@
+{
+  "texts": [
+    "MicroK8s is a lightweight Kubernetes distribution designed for developer workstations, edge devices, and small clusters.",
+    "Qdrant is a vector database that stores embeddings and supports similarity search for retrieval-augmented generation applications.",
+    "A RAG application retrieves relevant document context before asking a language model to generate an answer grounded in that context."
+  ]
+}

@@ -4,7 +4,25 @@ A self-hosted GPU AI platform for MicroK8s, combining vLLM, Open WebUI, Qdrant, 
 
 This repository is an adapted and documented implementation based on the upstream project by Deepak Deorari. The original MIT license and copyright notice are retained in [LICENSE](LICENSE). The deployment layout and application configuration have been adjusted for this repository, including environment-driven service endpoints and model settings.
 
-## Quick Start
+## Local Quick Start
+
+The easiest way to run the platform is with Docker Compose. This path needs Docker, curl, and about 5 GB of free disk space for the local model and embeddings. No GPU, AWS account, MicroK8s cluster, or Hugging Face token is required.
+
+```bash
+git clone https://github.com/anvii0/AI-Platform-on-MicroK8s.git
+cd AI-Platform-on-MicroK8s
+bash scripts/start-local.sh
+```
+
+Ask a question against the sample documents:
+
+```bash
+bash scripts/query-local.sh "What is Qdrant used for?"
+```
+
+The local stack uses Ollama with `qwen2.5:1.5b`, Qdrant, and the FastAPI RAG gateway. Stop it with `docker compose down`; add `-v` when you also want to remove downloaded model and vector data.
+
+## Advanced GPU Deployment
 
 The supported deployment target is an Ubuntu 24.04 MicroK8s node with an NVIDIA GPU. Start with the [deployment runbook](runbooks/full-deployment-runbook.md), then use the [troubleshooting notes](docs/troubleshooting.md) while validating each service.
 

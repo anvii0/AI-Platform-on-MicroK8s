@@ -416,7 +416,13 @@ screenshots/
 
 ---
 
-# Author
+# Maintainer
+
+Anvita Kulkarni (`anvii0`)
+
+Adapted, configured, and published for the AI Platform on MicroK8s repository.
+
+## Upstream Author
 
 Deepak Deorari
 
